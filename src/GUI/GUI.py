@@ -1,5 +1,5 @@
 import sys
-from src.GUI.ButtonAction import test
+from src.GUI.ButtonAction import test, newQuestions
 # 1. Import QApplication and all the required widgets
 from PyQt6.QtWidgets import (
     QApplication,
@@ -7,14 +7,28 @@ from PyQt6.QtWidgets import (
     QMainWindow,
     QStatusBar,
     QToolBar,
+    QRadioButton,
+    QPushButton,
+    QFrame,
+    QVBoxLayout,
+    QWidget
 )
 
 
 class Window(QMainWindow):
     def __init__(self):
+        self.w = 1280; self.h = 720
         super().__init__(parent=None)
         self.setWindowTitle("QMainWindow")
-        self.setCentralWidget(QLabel("I'm the Central Widget"))
+        layout = QVBoxLayout()
+        layout.addWidget(QFrame())
+        layout.addWidget(QRadioButton(text='radio text'))
+        layout.addWidget(QPushButton(text='push button text'))
+        widget = QWidget()
+        widget.setLayout(layout)
+
+        self.setCentralWidget(widget)
+        self.resize(self.w,self.h)
         self._createMenu()
         self._createToolBar()
         self._createStatusBar()
@@ -38,6 +52,10 @@ class Window(QMainWindow):
     
     def _test(self):
         test.test()
+    
+    def _oneRound(self):
+        pass
+        #Ask for 
 
 def app():
     app = QApplication([])
