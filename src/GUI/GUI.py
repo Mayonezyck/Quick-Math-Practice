@@ -55,8 +55,11 @@ class Window(QMainWindow):
     
     def _oneRound(self):
         pass
-        #Ask for 
-
+        #Take the number of exercises first.
+        #Generate a random seed
+        #Generate random exercises based on the random seed.
+        #Generate 
+    
 def app():
     app = QApplication([])
     window = Window()
