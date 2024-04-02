@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
     QHBoxLayout,
     QMessageBox,
     QWidget,
+    QSlider
 )
 from PyQt6 import QtCore
 import src.ResultR.resultSave as resultSave
@@ -48,6 +49,16 @@ class Window(QMainWindow):
         centralwidget = QWidget()
         #centralwidget.setStyleSheet("background-color: lightgray;")  # Optional styling
         centralwidget.setLayout(self.layout)
+        self.difficulty = 0
+        self.slider = QSlider(QtCore.Qt.Orientation.Horizontal)
+        self.slider.setMinimum(0)
+        self.slider.setMaximum(2)
+        self.slider.valueChanged.connect(self._update_dif_value)
+        self.value_label = QLabel("0")
+
+
+        self.layout.addWidget(self.slider)
+        self.layout.addWidget(self.value_label)
         self.setCentralWidget(centralwidget)
         self.resize(self.w,self.h)
         self._createMenu()
@@ -75,7 +86,7 @@ class Window(QMainWindow):
     def _open_new_window(self):
         try:
             number = int(self.textbox.text())
-            self.new_window = SecondWindow(number)
+            self.new_window = SecondWindow(number, self.difficulty)
             self.new_window.show()
             print('smth')
         except ValueError:
@@ -87,10 +98,14 @@ class Window(QMainWindow):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select a File")
         openLogs.openLogs(file_path)
     
+    def _update_dif_value(self, value):
+        self.value_label.setText(str(value))
+        self.difficulty = value
+    
 
     
 class SecondWindow(QWidget):
-    def __init__(self, number, mod = 'gen1'):
+    def __init__(self, number, difficulty, mod = 'gen1'):
         super().__init__()
         self.Correct = 0
         self.InCorrect = 0
@@ -98,7 +113,7 @@ class SecondWindow(QWidget):
         self.layout = QVBoxLayout(self)
         self.firstGo = True
         self.label = QLabel(f"You entered the number: {number}")
-        self.difficulty = 1
+        self.difficulty = difficulty
         match mod:
             case 'gen1':
                 self.ProbGen = probGen1.probGen1(number, self.difficulty)
@@ -113,11 +128,13 @@ class SecondWindow(QWidget):
         self.nextButton.setDefault(True)
         self.nextButton.clicked.connect(self._show_next_item)
         self.layout.addWidget(self.nextButton)
+        
+
+    
         self._show_next_item()
         self.preValue
         self.startTime = time.time()
         
-
             
     def _show_next_item(self):
         try:
