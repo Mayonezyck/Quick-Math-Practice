@@ -10,8 +10,10 @@ from PyQt6.QtWidgets import (
     QRadioButton,
     QPushButton,
     QFrame,
+    QLineEdit,
     QVBoxLayout,
-    QWidget
+    QMessageBox,
+    QWidget,
 )
 
 
@@ -20,14 +22,16 @@ class Window(QMainWindow):
         self.w = 1280; self.h = 720
         super().__init__(parent=None)
         self.setWindowTitle("QMainWindow")
-        layout = QVBoxLayout()
-        layout.addWidget(QFrame())
-        layout.addWidget(QRadioButton(text='radio text'))
-        layout.addWidget(QPushButton(text='push button text'))
-        widget = QWidget()
-        widget.setLayout(layout)
+        self.layout = QVBoxLayout()
+        self.textbox = QLineEdit()
+        self.layout.addWidget(self.textbox)
 
-        self.setCentralWidget(widget)
+        self.button = QPushButton("Submit")
+        self.button.clicked.connect(self._open_new_window)
+        self.layout.addWidget(self.button)
+        centralwidget = QWidget()
+        centralwidget.setLayout(self.layout)
+        self.setCentralWidget(centralwidget)
         self.resize(self.w,self.h)
         self._createMenu()
         self._createToolBar()
@@ -50,6 +54,14 @@ class Window(QMainWindow):
         status.showMessage("I'm the Status Bar")
         self.setStatusBar(status)
     
+    def _open_new_window(self):
+        try:
+            number = int(self.textbox.text())
+            self.new_window = SecondWindow(number)
+            self.new_window.show()
+        except ValueError:
+            error_dialog = QMessageBox.warning(self, "Error", "Please enter a valid number.")
+    
     def _test(self):
         test.test()
     
@@ -60,6 +72,15 @@ class Window(QMainWindow):
         #Generate random exercises based on the random seed.
         #Generate 
     
+class SecondWindow(QWidget):
+    def __init__(self, number):
+        super().__init__()
+        self.setWindowTitle("Second Window")
+        self.layout = QVBoxLayout(self)
+
+        self.label = QLabel(f"You entered the number: {number}")
+        self.layout.addWidget(self.label)
+
 def app():
     app = QApplication([])
     window = Window()
