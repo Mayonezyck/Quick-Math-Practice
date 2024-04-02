@@ -4,7 +4,9 @@ class probGen1():
         self.n = n
         self.difficulty = difficulty
         operation = ['+', '-', '*'] #This difficulty doesn't have division
-        self.operation = operation[difficulty]
+        print(difficulty)
+        self.operation = operation[0:difficulty+1]
+        print(self.operation)
     
     def _generateQuestions(self):
         Questions = {}

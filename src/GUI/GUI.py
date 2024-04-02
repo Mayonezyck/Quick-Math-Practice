@@ -98,9 +98,10 @@ class SecondWindow(QWidget):
         self.layout = QVBoxLayout(self)
         self.firstGo = True
         self.label = QLabel(f"You entered the number: {number}")
+        self.difficulty = 1
         match mod:
             case 'gen1':
-                self.ProbGen = probGen1.probGen1(number)
+                self.ProbGen = probGen1.probGen1(number, self.difficulty)
         QuestionDic = self.ProbGen._generateQuestions()
         self.layout.addWidget(self.label)
         self.QuestionDicIt = iter(QuestionDic.items())
@@ -143,7 +144,7 @@ class SecondWindow(QWidget):
             endTime = time.time()
             Elapseconds = endTime - self.startTime
             print(f'Correct: {self.Correct}, Incorrect: {self.InCorrect}')
-            resultSave.resultSave(self.Correct, self.InCorrect, Elapseconds)
+            resultSave.resultSave(self.difficulty, self.Correct, self.InCorrect, Elapseconds)
             
         except ValueError:
             print('value error')
