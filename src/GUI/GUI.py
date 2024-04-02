@@ -39,6 +39,7 @@ class Window(QMainWindow):
         input_row_layout.setContentsMargins(600, 0, 600, 0)
         self.layout.addLayout(input_row_layout)
         self.button = QPushButton("Submit")
+        self.button.setDefault(True)
         self.button.clicked.connect(self._open_new_window)
         self.layout.addWidget(self.button)
         centralwidget = QWidget()
@@ -101,29 +102,36 @@ class SecondWindow(QWidget):
         self.AnswerBox = QLineEdit()
         self.layout.addWidget(self.AnswerBox)
         self.nextButton = QPushButton(text='Next')
+        self.nextButton.setDefault(True)
         self.nextButton.clicked.connect(self._show_next_item)
         self.layout.addWidget(self.nextButton)
         self._show_next_item()
+        self.preValue
         
 
             
     def _show_next_item(self):
         try:
-            ans = -1
             if not self.firstGo:
                 ans = int(self.AnswerBox.text())
+                self._checkTF(ans,self.preValue)
+                key, self.preValue = next(self.QuestionDicIt)
+                self.QuestionLabel.setText(str(key))
+                self.AnswerBox.setText('')
+                self.AnswerBox.setFocus()
             else:
                 self.firstGo = False
-            key, value = self.QuestionDicIt.getKey()
-            
-            self._checkTF(ans,value)
-            self.QuestionLabel.setText(str(key))
+                key, self.preValue = next(self.QuestionDicIt)
+                self.QuestionLabel.setText(str(key))
+                
+                
         except StopIteration:
             # Reached the end
             print(int(self.AnswerBox.text()))
             self.nextButton.setEnabled(False)
             self.firstGo = True
             self.QuestionLabel.setText("End of dictionary")
+            self.AnswerBox.setDisabled(True)
             print(f'Correct{self.Correct}, Incorrect{self.InCorrect}')
         except ValueError:
             print('value error')
