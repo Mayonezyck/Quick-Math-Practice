@@ -1,6 +1,7 @@
 import sys
-from src.GUI.ButtonAction import test
+from src.GUI.ButtonAction import openLogs
 from src.ProbGen import probGen1
+import time
 # 1. Import QApplication and all the required widgets
 from PyQt6.QtWidgets import (
     QApplication,
@@ -11,6 +12,7 @@ from PyQt6.QtWidgets import (
     QRadioButton,
     QPushButton,
     QFrame,
+    QFileDialog,
     QLineEdit,
     QVBoxLayout,
     QHBoxLayout,
@@ -54,9 +56,11 @@ class Window(QMainWindow):
 
     def _createMenu(self):
         file = self.menuBar().addMenu("&File")
-        file.addAction("&Clear all", self._test)
+        #file.addAction("&Clear all", self._test)
         menu = self.menuBar().addMenu("&Menu")
         menu.addAction("&Exit", self.close)
+        logsMenu = self.menuBar().addMenu("&Log")
+        logsMenu.addAction('&Open', self._open_logs)
         
     def _createToolBar(self):
         tools = QToolBar()
@@ -79,8 +83,9 @@ class Window(QMainWindow):
             self.status.showMessage('Error: invalid number input')
             self.setStatusBar(self.status)
     
-    def _test(self):
-        test.test()
+    def _open_logs(self):
+        file_path, _ = QFileDialog.getOpenFileName(self, "Select a File")
+        openLogs.openLogs(file_path)
     
 
     
@@ -109,6 +114,7 @@ class SecondWindow(QWidget):
         self.layout.addWidget(self.nextButton)
         self._show_next_item()
         self.preValue
+        self.startTime = time.time()
         
 
             
@@ -134,8 +140,10 @@ class SecondWindow(QWidget):
             self.firstGo = True
             self.QuestionLabel.setText("End of dictionary")
             self.AnswerBox.setDisabled(True)
+            endTime = time.time()
+            Elapseconds = endTime - self.startTime
             print(f'Correct: {self.Correct}, Incorrect: {self.InCorrect}')
-            resultSave.resultSave(self.Correct, self.InCorrect)
+            resultSave.resultSave(self.Correct, self.InCorrect, Elapseconds)
             
         except ValueError:
             print('value error')
