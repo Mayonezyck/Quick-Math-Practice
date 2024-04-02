@@ -18,6 +18,7 @@ from PyQt6.QtWidgets import (
     QWidget,
 )
 from PyQt6 import QtCore
+import src.ResultR.resultSave as resultSave
 
 #The first window that shows up
 class Window(QMainWindow):
@@ -72,6 +73,7 @@ class Window(QMainWindow):
             number = int(self.textbox.text())
             self.new_window = SecondWindow(number)
             self.new_window.show()
+            print('smth')
         except ValueError:
             error_dialog = QMessageBox.warning(self, "Error", "Please enter a valid number.")
             self.status.showMessage('Error: invalid number input')
@@ -132,7 +134,9 @@ class SecondWindow(QWidget):
             self.firstGo = True
             self.QuestionLabel.setText("End of dictionary")
             self.AnswerBox.setDisabled(True)
-            print(f'Correct{self.Correct}, Incorrect{self.InCorrect}')
+            print(f'Correct: {self.Correct}, Incorrect: {self.InCorrect}')
+            resultSave.resultSave(self.Correct, self.InCorrect)
+            
         except ValueError:
             print('value error')
             
@@ -142,6 +146,8 @@ class SecondWindow(QWidget):
             self.Correct += 1
         else:
             self.InCorrect += 1
+
+
 def app():
     app = QApplication([])
     window = Window()

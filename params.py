@@ -1,0 +1,1 @@
+SAVING_PATH = 'logs'
