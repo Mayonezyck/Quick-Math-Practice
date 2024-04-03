@@ -22,11 +22,12 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6 import QtCore
 import src.ResultR.resultSave as resultSave
+import config
 
 #The first window that shows up
 class Window(QMainWindow):
     def __init__(self):
-        self.w = 1280; self.h = 720
+        self.w = config.WIDTH; self.h = config.HEIGHT
         super().__init__(parent=None)
         self.setWindowTitle("QMainWindow")
         self.layout = QVBoxLayout(self)
@@ -128,7 +129,7 @@ class SecondWindow(QWidget):
         self.nextButton.setDefault(True)
         self.nextButton.clicked.connect(self._show_next_item)
         self.layout.addWidget(self.nextButton)
-        
+        self.setFocus()
 
     
         self._show_next_item()

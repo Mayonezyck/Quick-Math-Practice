@@ -1,5 +1,5 @@
 import numpy as np
-import params
+import config
 import os
 def openLogs(filePath):
     log = np.load(filePath)
