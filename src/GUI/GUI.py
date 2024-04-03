@@ -22,14 +22,22 @@ from PyQt6.QtWidgets import (
 )
 from PyQt6 import QtCore
 import src.ResultR.resultSave as resultSave
+import src.ResultR.resultAna as analyze
 import config
 
 #The first window that shows up
 class Window(QMainWindow):
     def __init__(self):
-        self.w = config.WIDTH; self.h = config.HEIGHT
         super().__init__(parent=None)
+        self.w = config.WIDTH; self.h = config.HEIGHT
+        self.resize(self.w,self.h)
         self.setWindowTitle("QMainWindow")
+        self._createCentral()
+        self._createMenu()
+        self._createToolBar()
+        self._createStatusBar()
+
+    def _createCentral(self):
         self.layout = QVBoxLayout(self)
         self.layout.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter) 
         bigTitle = QLabel(text='Calculation Practice')
@@ -54,17 +62,16 @@ class Window(QMainWindow):
         self.slider = QSlider(QtCore.Qt.Orientation.Horizontal)
         self.slider.setMinimum(0)
         self.slider.setMaximum(2)
+        self.slider.setMaximumWidth(50)
+        self.slider.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.slider.valueChanged.connect(self._update_dif_value)
         self.value_label = QLabel("0")
+        self.value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 
 
         self.layout.addWidget(self.slider)
         self.layout.addWidget(self.value_label)
         self.setCentralWidget(centralwidget)
-        self.resize(self.w,self.h)
-        self._createMenu()
-        self._createToolBar()
-        self._createStatusBar()
 
     def _createMenu(self):
         file = self.menuBar().addMenu("&File")
@@ -73,6 +80,7 @@ class Window(QMainWindow):
         menu.addAction("&Exit", self.close)
         logsMenu = self.menuBar().addMenu("&Log")
         logsMenu.addAction('&Open', self._open_logs)
+        logsMenu.addAction('&Analyze', self._analyze_logs)
         
     def _createToolBar(self):
         tools = QToolBar()
@@ -98,7 +106,8 @@ class Window(QMainWindow):
     def _open_logs(self):
         file_path, _ = QFileDialog.getOpenFileName(self, "Select a File")
         openLogs.openLogs(file_path)
-    
+    def _analyze_logs(self):
+        analyze.resultAna()
     def _update_dif_value(self, value):
         self.value_label.setText(str(value))
         self.difficulty = value
