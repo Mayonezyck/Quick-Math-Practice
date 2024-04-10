@@ -63,7 +63,7 @@ class Window(QMainWindow):
         self.slider.setMinimum(0)
         self.slider.setMaximum(2)
         self.slider.setMaximumWidth(50)
-        self.slider.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        ##self.slider.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.slider.valueChanged.connect(self._update_dif_value)
         self.value_label = QLabel("0")
         self.value_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
